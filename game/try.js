@@ -34,7 +34,7 @@ function preload ()
     this.load.image('purple-platform', './assets/platformsP.png');
     this.load.image('nut', './assets/nut.png');
     this.load.image('screw', './assets/screw.png');
-    this.load.spritesheet('robot','assets/Robots.png', { frameWidth: 78, frameHeight: 100 });
+    this.load.spritesheet('robot','assets/spritesheet.png', { frameWidth: 78, frameHeight: 100 });
 }
 
 function create ()
@@ -71,15 +71,11 @@ function create ()
     platforms.create(1330, 220, 'purple-platform');
 
 
-    player = this.physics.add.sprite(80, 100, 'robot');
+    player = this.physics.add.sprite(90, 100, 'robot');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
-    ///////////////////
-    this.physics.world.setBounds(0, 0, 2000, 600);
-    const cameraManager = new CameraManager(this);
-    cameraManager.setupCamera(this.player, 2000, 600);
-    
+
 
     this.anims.create({
         key: 'left',
