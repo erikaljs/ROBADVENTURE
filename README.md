@@ -4,8 +4,8 @@
 - [I. Description](#i-Description)
 - [II. Installation](#ii-Installation)
 - [III. Fonctionnement](#iii-Fonctionnement)
-- [IV. Contrôles](#iv-Controles)
-- [V. Crédits](#v-Credits)
+- [IV. Motivations](#iv-Motivations)
+- [V. Crédits](#v-Crédits)
 
 
 ## I. Description 
@@ -31,7 +31,7 @@ Tapez la commande : `node serveur/server.js` afin de lancer le serveur.
 Puis dans votre barre de recherche, entrez l'url : `http://localhost:8080/`
 
 
-## III.Fonctionnement
+## III. Fonctionnement
 
 - Utilisez les touches fléchées gauche et droite pour déplacer le robot.
 - Utilisez la touche fléchée vers le haut pour sauter.
