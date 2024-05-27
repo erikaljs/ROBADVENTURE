@@ -19,9 +19,11 @@ var config = {
 
 var game = new Phaser.Game(config);
 var player;
-var stars;
-var bombs;
-var platforms;
+var nuts;
+var screws;
+var enemies;
+var platformsP;
+var platformsB;
 var cursors;
 var score = 0;
 var gameOver = false;
@@ -34,47 +36,63 @@ function preload ()
     this.load.image('purple-platform', './assets/platformsP.png');
     this.load.image('nut', './assets/nut.png');
     this.load.image('screw', './assets/screw.png');
+    this.load.image('enemy', './assets/enemy.png');
     this.load.spritesheet('robot','assets/spritesheet.png', { frameWidth: 78, frameHeight: 100 });
 }
 
 function create ()
 {
-    this.add.image(400, 300, 'background');
+    // this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background').setScale(2);
+    let bg = this.add.image(0, 0, 'background').setOrigin(0, 0.5).setScale(2);
+    let worldWidth = bg.displayWidth/2;
+    let worldHeight = bg.displayHeight/2;
+    
+    
+    this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
+    
+    this.cameras.main.setBounds(0, 0, worldWidth, worldHeight);
+
+    platformsB = this.physics.add.staticGroup();
+    platformsP = this.physics.add.staticGroup();
+
+    for (let x = 74; x < worldWidth; x += 148) {
+        platformsB.create(x, 630, 'blue-platform').setScale(2).refreshBody();
+    }
+
+    // platformsB.create(74, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(222, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(370, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(518, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(666, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(814, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(962, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(1110, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(1258, 630, 'blue-platform').setScale(2).refreshBody();
+    // platformsB.create(1406, 630, 'blue-platform').setScale(2).refreshBody();
 
 
-    platforms = this.physics.add.staticGroup();
 
-    platforms.create(74, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(222, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(370, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(518, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(666, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(814, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(962, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(1110, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(1258, 630, 'blue-platform').setScale(2).refreshBody();
-    platforms.create(1406, 630, 'blue-platform').setScale(2).refreshBody();
-
-
-    platforms.create(455, 400, 'purple-platform');
-    platforms.create(600, 400, 'purple-platform');
-    platforms.create(745, 400, 'purple-platform');
-    platforms.create(890, 400, 'purple-platform');
-    platforms.create(1035, 400, 'purple-platform');
-    platforms.create(1180, 400, 'purple-platform');
-    platforms.create(50, 250, 'purple-platform');
-    platforms.create(195, 250, 'purple-platform');
-    platforms.create(340, 250, 'purple-platform');
-    platforms.create(750, 220, 'purple-platform');
-    platforms.create(895, 220, 'purple-platform');
-    platforms.create(1040, 220, 'purple-platform');
-    platforms.create(1330, 220, 'purple-platform');
+    platformsP.create(455, 400, 'purple-platform');
+    platformsP.create(600, 400, 'purple-platform');
+    platformsP.create(745, 400, 'purple-platform');
+    platformsP.create(890, 400, 'purple-platform');
+    platformsP.create(1035, 400, 'purple-platform');
+    platformsP.create(1180, 400, 'purple-platform');
+    platformsP.create(50, 250, 'purple-platform');
+    platformsP.create(195, 250, 'purple-platform');
+    platformsP.create(340, 250, 'purple-platform');
+    platformsP.create(750, 220, 'purple-platform');
+    platformsP.create(895, 220, 'purple-platform');
+    platformsP.create(1040, 220, 'purple-platform');
+    platformsP.create(1330, 220, 'purple-platform');
 
 
     player = this.physics.add.sprite(90, 100, 'robot');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+
+    this.cameras.main.startFollow(player);
 
 
     this.anims.create({
@@ -97,10 +115,12 @@ function create ()
         repeat: -1
     });
 
+    this.cursors = this.input.keyboard.createCursorKeys();
+
     nuts = this.physics.add.group({
         key: 'nut',
-        repeat: 5,
-        setXY: { x: 20, y: 0, stepX: 80 }
+        repeat: 15,
+        setXY: { x: 12, y: 0, stepX: 70 }
     });
     
     nuts.children.iterate(function (child) {
@@ -111,24 +131,44 @@ function create ()
 
     screws = this.physics.add.group({
         key: 'screw',
-        repeat: 5,
-        setXY: { x: 10, y: 100, stepX: 40 }
+        repeat: 15,
+        setXY: { x: 80, y: 0, stepX: 100 }
     });
     
     screws.children.iterate(function (child) {
     
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    
     });
-    this.cursors = this.input.keyboard.createCursorKeys();
 
+    enemies = this.physics.add.group();
 
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-    // this.physics.add.collider(player, platforms);
+    this.physics.add.collider(player, platformsB);
+    this.physics.add.collider(player, platformsP);
+    this.physics.add.collider(nuts, platformsB);
+    this.physics.add.collider(nuts, platformsP);
+    this.physics.add.collider(screws, platformsB);
+    this.physics.add.collider(screws, platformsP);
+    this.physics.add.collider(enemies, platformsB);
+    this.physics.add.collider(enemies, platformsP);
+
+
+    this.physics.add.overlap(player, nuts, collectNuts, null, this);
+
+    this.physics.add.collider(player, screws, collectScrews, null, this);
+
+    this.physics.add.collider(player, enemies, hitEnemy, null, this);
 }
 
 function update ()
 {
+    if (gameOver)
+    {
+        return;
+    }
+
     if (this.cursors.left.isDown)
         {
             player.setVelocityX(-160);
@@ -152,4 +192,64 @@ function update ()
         {
             player.setVelocityY(-330);
         }
+}
+
+function collectNuts (player, nut)
+{
+    nut.disableBody(true, true);
+
+    score += 2;
+    scoreText.setText('Score: ' + score);
+
+    if (nuts.countActive(true) === 0)
+    {
+        nuts.children.iterate(function (child) {
+
+            child.enableBody(true, child.x, 0, true, true);
+
+        });
+
+        spawnEnemy();
+    }
+}
+
+function collectScrews (player, screw)
+{
+    screw.disableBody(true, true);
+
+    score += 2;
+    scoreText.setText('Score: ' + score);
+
+    if (screws.countActive(true) === 0)
+    {
+        screws.children.iterate(function (child) {
+
+            child.enableBody(true, child.x, 0, true, true);
+
+        });
+
+        spawnEnemy();
+
+    }
+}
+
+function hitEnemy (player, enemy)
+{
+    this.physics.pause();
+
+    player.setTint(0xff0000);
+
+    player.anims.play('turn');
+
+    gameOver = true;
+}
+
+function spawnEnemy() {
+    var x = (player.x < window.innerWidth / 2) ? Phaser.Math.Between(window.innerWidth / 2, window.innerWidth) : Phaser.Math.Between(0, window.innerWidth / 2);
+
+    var enemy = enemies.create(x, 16, 'enemy');
+    enemy.setBounce(1);
+    enemy.setCollideWorldBounds(true);
+    enemy.setVelocity(Phaser.Math.Between(-200, 200), 20);
+    enemy.allowGravity = false;
 }
