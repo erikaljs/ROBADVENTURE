@@ -1,3 +1,4 @@
+//jeu complet (ca regroupe tout)
 var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
@@ -74,6 +75,11 @@ function create ()
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+    ///////////////////
+    this.physics.world.setBounds(0, 0, 2000, 600);
+    const cameraManager = new CameraManager(this);
+    cameraManager.setupCamera(this.player, 2000, 600);
+    
 
     this.anims.create({
         key: 'left',
@@ -121,6 +127,8 @@ function create ()
 
 
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+    // this.physics.add.collider(player, platforms);
 }
 
 function update ()

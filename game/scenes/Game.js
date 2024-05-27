@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import CameraManager from './CameraManager';
 
 export class Game extends Scene
 {
@@ -25,6 +26,11 @@ export class Game extends Scene
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
 
+        ///////////////////
+        this.physics.world.setBounds(0, 0, 2000, 600);
+        const cameraManager = new CameraManager(this);
+        cameraManager.setupCamera(this.player, 2000, 600);
+        
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('robot', { start: 0, end: 3 }),
@@ -56,6 +62,21 @@ export class Game extends Scene
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         
         });
+        
+        //mechants robots 
+            this.enemies = this.physics.add.group({
+                key: 'enemy',
+                repeat: 5,
+                setXY: { x: 100, y: 0, stepX: 200 }
+            });
+        
+            this.enemies.children.iterate(function (enemy) {
+                enemy.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+            });
+        
+            this.physics.add.collider(this.enemies, this.platforms);
+        }
+        
 
 
         scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -87,5 +108,25 @@ export class Game extends Scene
             {
                 player.setVelocityY(-330);
             }
+            // gestion des déplacements du joueur par rapport mechants
+            this.physics.world.overlap(this.player, this.enemies, this.handleEnemyCollision, null, this);
     }
-}
+
+    handleEnemyCollision(player, enemy); {
+        if (player.body.velocity.y > 0 && player.y < enemy.y) {
+            enemy.disableBody(true, true); // Le méchant est tué
+        } else {
+            this.playerLives -= 1; // Le joueur perd une vie
+            this.resetPlayerPosition(); // Optionnel, réinitialiser la position du joueur
+            if (this.playerLives <= 0) {
+                this.gameOver(); // Gérer la fin du jeu
+            }
+        }
+    }
+
+    gameOver(); {
+        this.physics.pause();
+        this.player.setTint(0xff0000); //change la couleur du joueur pr indiquer que le joueur a été touché
+        this.add.text(400, 300, 'Game Over', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        // Peut-être revenir au menu principal ou recharger la scène après un délai
+    }
