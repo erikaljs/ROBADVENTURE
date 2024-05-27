@@ -81,15 +81,26 @@ function create ()
     platformsP.create(50, 325, 'purple-platform');
     platformsP.create(195, 325, 'purple-platform');
 
+    platformsP.create(605, 220, 'purple-platform');
     platformsP.create(750, 220, 'purple-platform');
     platformsP.create(895, 220, 'purple-platform');
-    platformsP.create(1040, 220, 'purple-platform');
 
     platformsP.create(1330, 300, 'purple-platform');
     platformsP.create(1475, 300, 'purple-platform');
     platformsP.create(1620, 300, 'purple-platform');
 
-    platformsP.create(1500, 350, 'purple-platform');
+    platformsP.create(1910, 350, 'purple-platform');
+    platformsP.create(2055, 350, 'purple-platform');
+
+    platformsP.create(1645, 500, 'purple-platform');
+    platformsP.create(1790, 500, 'purple-platform');
+
+    platformsP.create(2100, 200, 'purple-platform');
+    platformsP.create(2245, 200, 'purple-platform');
+    platformsP.create(2390, 200, 'purple-platform');
+
+    platformsP.create(2535, 550, 'purple-platform');
+
 
     
 
@@ -148,6 +159,7 @@ function create ()
     });
 
     enemies = this.physics.add.group();
+    spawnEnemy();
 
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
@@ -202,6 +214,7 @@ function update ()
 
 function collectNuts (player, nut)
 {
+
     nut.disableBody(true, true);
 
     score += 2;
@@ -215,12 +228,13 @@ function collectNuts (player, nut)
 
         });
 
-        spawnEnemy();
+        // spawnEnemy();
     }
 }
 
 function collectScrews (player, screw)
 {
+
     screw.disableBody(true, true);
 
     score += 2;
@@ -234,7 +248,6 @@ function collectScrews (player, screw)
 
         });
 
-        spawnEnemy();
 
     }
 }
@@ -253,7 +266,7 @@ function hitEnemy (player, enemy)
 function spawnEnemy() {
     var x = (player.x < window.innerWidth / 2) ? Phaser.Math.Between(window.innerWidth / 2, window.innerWidth) : Phaser.Math.Between(0, window.innerWidth / 2);
 
-    var enemy = enemies.create(x, 16, 'enemy');
+    var enemy = enemies.create(x, 5, 'enemy');
     enemy.setBounce(1);
     enemy.setCollideWorldBounds(true);
     enemy.setVelocity(Phaser.Math.Between(-200, 200), 20);
