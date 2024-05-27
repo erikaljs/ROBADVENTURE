@@ -26,12 +26,22 @@ Installer les dépendances : `npm install`
 
 Revenez dans le dossier racine **RobAdventure** avec la commande : `cd ..`
 
+Tapez la commande : `node serveur/server.js` afin de lancer le serveur.
+
+Puis dans votre barre de recherche, entrez l'url : `http://localhost:8080/`
+
 
 ### III.Fonctionnement
 
+- Utilisez les touches fléchées gauche et droite pour déplacer le robot.
+- Utilisez la touche fléchée vers le haut pour sauter.
+- Collectez les objets pour gagner des points.
+- Évitez les ennemis et les pièges pour ne pas perdre de vie.
 
 
 #### IV. Motivations
+
+Etant toutes deux passionées par la robotique et souhaitant rendre cela plus ludique, nous avons utilisé phaser afin de concevoir en un temps relativement court un jeu de platformes amusant et divertissant. Les graphismes du jeu sont en partie faits par nous-même car nous nous sommes inspirées du film Wall-E et nous voulions donc un robot correspondant à nos attentes, c'est-à-dire un robot ressemblant à Eve avec l'air attachant de Wall-E.
 
 
 ##### V. Crédits
