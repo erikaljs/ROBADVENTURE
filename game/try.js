@@ -31,7 +31,7 @@ var scoreText;
 
 function preload ()
 {
-    this.load.image('background', './assets/background.jpg');
+    this.load.image('background', './assets/background1.jpg');
     this.load.image('blue-platform', './assets/platforms1.jpg');
     this.load.image('purple-platform', './assets/platformsP.png');
     this.load.image('nut', './assets/nut.png');
@@ -43,9 +43,9 @@ function preload ()
 function create ()
 {
     // this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'background').setScale(2);
-    let bg = this.add.image(0, 0, 'background').setOrigin(0, 0.5).setScale(2);
-    let worldWidth = bg.displayWidth/2;
-    let worldHeight = bg.displayHeight/2;
+    let bg = this.add.image(0, 0, 'background').setOrigin(0, 0).setScale(1);
+    let worldWidth = bg.displayWidth;
+    let worldHeight = bg.displayHeight;
     
     
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight);
@@ -59,7 +59,7 @@ function create ()
         platformsB.create(x, 630, 'blue-platform').setScale(2).refreshBody();
     }
 
-    // platformsB.create(74, 630, 'blue-platform').setScale(2).refreshBody();
+    platformsB.create(2738, 630, 'blue-platform').setScale(2).refreshBody();
     // platformsB.create(222, 630, 'blue-platform').setScale(2).refreshBody();
     // platformsB.create(370, 630, 'blue-platform').setScale(2).refreshBody();
     // platformsB.create(518, 630, 'blue-platform').setScale(2).refreshBody();
@@ -71,21 +71,27 @@ function create ()
     // platformsB.create(1406, 630, 'blue-platform').setScale(2).refreshBody();
 
 
+    platformsP.create(455, 475, 'purple-platform');
+    platformsP.create(600, 475, 'purple-platform');
+    platformsP.create(745, 475, 'purple-platform');
+    platformsP.create(890, 475, 'purple-platform');
+    platformsP.create(1035, 475, 'purple-platform');
+    platformsP.create(1180, 475, 'purple-platform');
 
-    platformsP.create(455, 400, 'purple-platform');
-    platformsP.create(600, 400, 'purple-platform');
-    platformsP.create(745, 400, 'purple-platform');
-    platformsP.create(890, 400, 'purple-platform');
-    platformsP.create(1035, 400, 'purple-platform');
-    platformsP.create(1180, 400, 'purple-platform');
-    platformsP.create(50, 250, 'purple-platform');
-    platformsP.create(195, 250, 'purple-platform');
-    platformsP.create(340, 250, 'purple-platform');
+    platformsP.create(50, 325, 'purple-platform');
+    platformsP.create(195, 325, 'purple-platform');
+
     platformsP.create(750, 220, 'purple-platform');
     platformsP.create(895, 220, 'purple-platform');
     platformsP.create(1040, 220, 'purple-platform');
-    platformsP.create(1330, 220, 'purple-platform');
 
+    platformsP.create(1330, 300, 'purple-platform');
+    platformsP.create(1475, 300, 'purple-platform');
+    platformsP.create(1620, 300, 'purple-platform');
+
+    platformsP.create(1500, 350, 'purple-platform');
+
+    
 
     player = this.physics.add.sprite(90, 100, 'robot');
 
