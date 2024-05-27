@@ -1,3 +1,4 @@
+//jeu complet (ca regroupe tout)
 var config = {
     type: Phaser.AUTO,
     width: 800,
