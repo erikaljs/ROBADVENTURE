@@ -28,15 +28,20 @@ var cursors;
 var score = 0;
 var gameOver = false;
 var scoreText;
+var txt;
 
 function preload ()
 {
     this.load.image('background', './assets/background1.jpg');
     this.load.image('blue-platform', './assets/platforms1.jpg');
-    this.load.image('purple-platform', './assets/platformsP.png');
+    this.load.image('purple-platform', './assets/platforms2.png');
     this.load.image('nut', './assets/nut.png');
     this.load.image('screw', './assets/screw.png');
+    this.load.image('battery', './assets/batterie.png');
+    this.load.image('moteur', './assets/motoReducteur.png');
+    this.load.image('pontEnH', './assets/L298N.png');
     this.load.image('enemy', './assets/enemy.png');
+    this.load.image('rob', './assets/Rob.png');
     this.load.spritesheet('robot','assets/spritesheet.png', { frameWidth: 78, frameHeight: 100 });
 }
 
@@ -99,10 +104,11 @@ function create ()
     platformsP.create(2245, 200, 'purple-platform');
     platformsP.create(2390, 200, 'purple-platform');
 
-    platformsP.create(2535, 550, 'purple-platform');
+    platformsP.create(2535, 450, 'purple-platform');
 
 
-    
+    Rob = this.physics.add.staticGroup();
+    Rob.create(2620, 600, 'rob').setScale(1);
 
     player = this.physics.add.sprite(90, 100, 'robot');
 
@@ -134,6 +140,16 @@ function create ()
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+
+    battery = this.physics.add.staticGroup();
+    battery.create(1000, 300, 'battery').setScale(1);
+
+    motor = this.physics.add.staticGroup();
+    motor.create(400, 100, 'moteur').setScale(1);
+
+    pontEnH = this.physics.add.staticGroup();
+    pontEnH.create(2100, 500, 'pontEnH').setScale(1);
+
     nuts = this.physics.add.group({
         key: 'nut',
         repeat: 15,
@@ -161,7 +177,7 @@ function create ()
     enemies = this.physics.add.group();
     spawnEnemy();
 
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '40px', fill: '#FFF', fontStyle: 'bold' });
 
     this.physics.add.collider(player, platformsB);
     this.physics.add.collider(player, platformsP);
@@ -169,15 +185,29 @@ function create ()
     this.physics.add.collider(nuts, platformsP);
     this.physics.add.collider(screws, platformsB);
     this.physics.add.collider(screws, platformsP);
+    this.physics.add.collider(battery, platformsB);
+    this.physics.add.collider(battery, platformsP);
+    this.physics.add.collider(motor, platformsB);
+    this.physics.add.collider(motor, platformsP);
+    this.physics.add.collider(pontEnH, platformsB);
+    this.physics.add.collider(pontEnH, platformsP);
+
+    this.physics.add.collider(Rob, platformsB);
+    this.physics.add.collider(Rob, platformsP);
+
+
     this.physics.add.collider(enemies, platformsB);
     this.physics.add.collider(enemies, platformsP);
 
 
     this.physics.add.overlap(player, nuts, collectNuts, null, this);
-
     this.physics.add.collider(player, screws, collectScrews, null, this);
-
     this.physics.add.collider(player, enemies, hitEnemy, null, this);
+    this.physics.add.overlap(player, Rob, friend, null, this);
+    this.physics.add.overlap(player, battery, collectBattery, null, this);
+    this.physics.add.overlap(player, pontEnH, collectL298N, null, this);
+    this.physics.add.overlap(player, motor, collectMotors, null, this);
+
 }
 
 function update ()
@@ -214,42 +244,36 @@ function update ()
 
 function collectNuts (player, nut)
 {
-
     nut.disableBody(true, true);
 
     score += 2;
     scoreText.setText('Score: ' + score);
-
-    if (nuts.countActive(true) === 0)
-    {
-        nuts.children.iterate(function (child) {
-
-            child.enableBody(true, child.x, 0, true, true);
-
-        });
-
-        // spawnEnemy();
-    }
 }
 
 function collectScrews (player, screw)
 {
-
     screw.disableBody(true, true);
 
     score += 2;
     scoreText.setText('Score: ' + score);
+}
 
-    if (screws.countActive(true) === 0)
-    {
-        screws.children.iterate(function (child) {
+function collectL298N(player, pontEnH) {
+    pontEnH.disableBody(true, true);
+    score += 5;
+    scoreText.setText('Score: ' + score);
+}
 
-            child.enableBody(true, child.x, 0, true, true);
+function collectMotors(player, motor) {
+    motor.disableBody(true, true);
+    score += 5;
+    scoreText.setText('Score: ' + score);
+}
 
-        });
-
-
-    }
+function collectBattery(player, battery) {
+    battery.disableBody(true, true);
+    score += 5;
+    scoreText.setText('Score: ' + score);
 }
 
 function hitEnemy (player, enemy)
@@ -271,4 +295,10 @@ function spawnEnemy() {
     enemy.setCollideWorldBounds(true);
     enemy.setVelocity(Phaser.Math.Between(-200, 200), 20);
     enemy.allowGravity = false;
+}
+
+
+function friend() {
+    alert("My friend !! \n End of Game"); 
+    game.scene.pause(); 
 }
