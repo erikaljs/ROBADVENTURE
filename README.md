@@ -5,7 +5,7 @@
 - [II. Installation](#ii-Installation)
 - [III. Fonctionnement](#iii-Fonctionnement)
 - [IV. Contrôles](#iv-Controles)
-- [V. Crédits](#credits)
+- [V. Crédits](#v-Credits)
 
 
 ## I. Description 
