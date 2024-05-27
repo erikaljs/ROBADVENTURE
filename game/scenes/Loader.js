@@ -1,5 +1,3 @@
-import { Scene } from 'phaser';
-
 export default class Loader extends Phaser.Scene {
     constructor() {
         super({ key: 'Loader' });

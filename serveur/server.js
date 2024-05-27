@@ -4,9 +4,9 @@ const app = express();
 
 const PORT = 8080;
 
-app.use(express.static(path.resolve(__dirname, '..//game')));
+app.use(express.static(path.resolve(__dirname, '../game')));
 
-// Servir 'index.html' pour la route racine
+
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..//game/index.html'));
 });

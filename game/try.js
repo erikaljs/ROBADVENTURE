@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     physics: {
         default: 'arcade',
         arcade: {
@@ -17,34 +17,60 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var player;
+var stars;
+var bombs;
+var platforms;
+var cursors;
+var score = 0;
+var gameOver = false;
+var scoreText;
 
 function preload ()
 {
-    this.load.image('background', './game/assets/background.png');
-    this.load.image('blue-platform', './game/assets/platforms1.png');
-    this.load.image('purple-platform', './game/assets/platforms2.png');
-    this.load.image('nut', './game/assets/nut.png');
-    this.load.image('screw', './game/assets/screw.png');
-    this.load.spritesheet('robot',
-        'assets/Robots.png',
-        { frameWidth: 32, frameHeight: 48 }
-    );
+    this.load.image('background', './assets/background.jpg');
+    this.load.image('blue-platform', './assets/platforms1.jpg');
+    this.load.image('purple-platform', './assets/platformsP.png');
+    this.load.image('nut', './assets/nut.png');
+    this.load.image('screw', './assets/screw.png');
+    this.load.spritesheet('robot','assets/Robots.png', { frameWidth: 78, frameHeight: 100 });
 }
 
 function create ()
 {
     this.add.image(400, 300, 'background');
 
+
     platforms = this.physics.add.staticGroup();
 
-    platforms.create(400, 568, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(74, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(222, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(370, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(518, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(666, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(814, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(962, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(1110, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(1258, 630, 'blue-platform').setScale(2).refreshBody();
+    platforms.create(1406, 630, 'blue-platform').setScale(2).refreshBody();
 
+
+    platforms.create(455, 400, 'purple-platform');
     platforms.create(600, 400, 'purple-platform');
+    platforms.create(745, 400, 'purple-platform');
+    platforms.create(890, 400, 'purple-platform');
+    platforms.create(1035, 400, 'purple-platform');
+    platforms.create(1180, 400, 'purple-platform');
     platforms.create(50, 250, 'purple-platform');
+    platforms.create(195, 250, 'purple-platform');
+    platforms.create(340, 250, 'purple-platform');
     platforms.create(750, 220, 'purple-platform');
+    platforms.create(895, 220, 'purple-platform');
+    platforms.create(1040, 220, 'purple-platform');
+    platforms.create(1330, 220, 'purple-platform');
 
 
-    player = this.physics.add.sprite(100, 450, 'robot');
+    player = this.physics.add.sprite(80, 100, 'robot');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -71,8 +97,8 @@ function create ()
 
     nuts = this.physics.add.group({
         key: 'nut',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 }
+        repeat: 5,
+        setXY: { x: 20, y: 0, stepX: 80 }
     });
     
     nuts.children.iterate(function (child) {
@@ -83,15 +109,15 @@ function create ()
 
     screws = this.physics.add.group({
         key: 'screw',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 }
+        repeat: 5,
+        setXY: { x: 10, y: 100, stepX: 40 }
     });
     
     screws.children.iterate(function (child) {
     
         child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    
     });
+    this.cursors = this.input.keyboard.createCursorKeys();
 
 
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -99,13 +125,13 @@ function create ()
 
 function update ()
 {
-    if (cursors.left.isDown)
+    if (this.cursors.left.isDown)
         {
             player.setVelocityX(-160);
         
             player.anims.play('left', true);
         }
-        else if (cursors.right.isDown)
+        else if (this.cursors.right.isDown)
         {
             player.setVelocityX(160);
         
@@ -118,7 +144,7 @@ function update ()
             player.anims.play('turn');
         }
         
-        if (cursors.up.isDown && player.body.touching.down)
+        if (this.cursors.up.isDown && player.body.touching.down)
         {
             player.setVelocityY(-330);
         }
