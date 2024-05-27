@@ -21,7 +21,7 @@ Description de la capture d'écran 1
 Description de la capture d'écran 2
 
 Installation
-Cloner le dépôt GitHub : git clone https://github.com/votre-utilisateur/robot-platformer.git
+Cloner le dépôt GitHub : git clone https://github.com/erikaljs/ROBADVENTURE.git
 Naviguer vers le répertoire du jeu : cd robot-platformer
 Installer les dépendances : npm install
 Démarrer le serveur de développement : npm start
