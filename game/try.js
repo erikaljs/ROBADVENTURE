@@ -145,7 +145,10 @@ function create ()
     battery.create(1000, 300, 'battery').setScale(1);
 
     motor = this.physics.add.staticGroup();
-    motor.create(400, 100, 'moteur').setScale(1);
+    motor.create(400, 400, 'moteur').setScale(1);
+    motor.create(1700, 220, 'moteur').setScale(1);
+    motor.create(250, 150, 'moteur').setScale(1);
+    motor.create(2500, 350, 'moteur').setScale(1);
 
     pontEnH = this.physics.add.staticGroup();
     pontEnH.create(2100, 500, 'pontEnH').setScale(1);
